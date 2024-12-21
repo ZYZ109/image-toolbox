@@ -126,12 +126,13 @@ export class ImageCompressor {
         qualitySlider.addEventListener('input', () => {
             const value = qualitySlider.value;
             qualityValue.textContent = `${value}%`;
-            this.quality = value / 100;
+            // 将百分比转换为0-1的质量值，使用非线性映射
+            this.quality = Math.pow(value / 100, 1.5); // 使用幂函数使压缩更符合人的感知
         });
 
         // 压缩按钮
         compressBtn.addEventListener('click', () => {
-            this.compressImage();
+            this.compressImages();
         });
 
         // 下载按钮
@@ -187,10 +188,12 @@ export class ImageCompressor {
                 const preview = await this.createPreview(file);
                 this.files.push({
                     file,
-                    preview,
+                    preview: preview.dataUrl,
                     name: file.name,
                     type: file.type,
-                    size: file.size
+                    size: file.size,
+                    width: preview.width,
+                    height: preview.height
                 });
             }
 
@@ -208,7 +211,18 @@ export class ImageCompressor {
     async createPreview(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
+            reader.onload = (e) => {
+                // 创建图片对象来获取分辨率
+                const img = new Image();
+                img.onload = () => {
+                    resolve({
+                        dataUrl: e.target.result,
+                        width: img.width,
+                        height: img.height
+                    });
+                };
+                img.src = e.target.result;
+            };
             reader.readAsDataURL(file);
         });
     }
@@ -220,6 +234,10 @@ export class ImageCompressor {
                 <img src="${file.preview}" alt="${file.name}">
                 <div class="preview-item-overlay">
                     <span class="preview-item-name">${file.name}</span>
+                    <div class="preview-item-info">
+                        <span class="preview-item-resolution">${file.width} × ${file.height}</span>
+                        <span class="preview-item-size">${this.formatFileSize(file.size)}</span>
+                    </div>
                     <button class="remove-btn" data-index="${index}">×</button>
                 </div>
             </div>
@@ -279,31 +297,113 @@ export class ImageCompressor {
         }
     }
 
-    compressImage() {
+    async compressImage(file) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // 计算压缩后的尺寸
+                let { width, height } = img;
+                const maxSize = 1920; // 最大宽度/高度限制
+                
+                // 根据原始尺寸计算压缩比例
+                let scale = 1;
+                if (width > maxSize || height > maxSize) {
+                    scale = Math.min(maxSize / width, maxSize / height);
+                    width = Math.round(width * scale);
+                    height = Math.round(height * scale);
+                }
+                
+                // 设置画布尺寸
+                canvas.width = width;
+                canvas.height = height;
+                
+                // 绘制图片
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // 根据原始图片类型和大小选择最佳的输出格式和质量
+                let outputType = file.type;
+                let quality = this.quality;
+                
+                // 对于不同类型的图片使用不同的压缩策略
+                if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+                    outputType = 'image/jpeg';
+                    // JPEG质量可以更激进一些
+                    quality = Math.max(0.1, this.quality);
+                } else if (file.type === 'image/png') {
+                    if (!this.hasTransparency(ctx, width, height)) {
+                        outputType = 'image/jpeg'; // 无透明度的PNG转换为JPEG
+                        quality = Math.max(0.1, this.quality);
+                    } else {
+                        outputType = 'image/png';
+                        // PNG需要保持较高质量以保持透明度
+                        quality = Math.max(0.6, this.quality);
+                    }
+                } else if (file.type === 'image/webp') {
+                    outputType = 'image/webp';
+                    quality = Math.max(0.1, this.quality);
+                }
+                
+                // 如果原图小于100KB，提高最低质量以保持清晰度
+                if (file.size < 102400) {
+                    quality = Math.max(0.7, quality);
+                }
+                
+                canvas.toBlob(
+                    (blob) => resolve(blob),
+                    outputType,
+                    quality
+                );
+                
+                URL.revokeObjectURL(img.src);
+            };
+            
+            img.onerror = reject;
+        });
+    }
+
+    // 检查图片是否包含透明通道
+    hasTransparency(ctx, width, height) {
+        const imageData = ctx.getImageData(0, 0, width, height).data;
+        for (let i = 3; i < imageData.length; i += 4) {
+            if (imageData[i] < 255) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async compressImages() {
         if (this.files.length === 0) return;
 
+        const compressBtn = document.querySelector('.compress-btn');
+        compressBtn.disabled = true;
+
         this.compressedImages = [];
-        const promises = this.files.map(async (fileData) => {
-            const img = new Image();
-            img.src = fileData.preview;
-            await new Promise(resolve => img.onload = resolve);
+        
+        try {
+            // 遍历所有文件进行压缩
+            for (const fileData of this.files) {
+                const compressedBlob = await this.compressImage(fileData.file);
+                
+                // 将压缩后的文件转换为 base64
+                const reader = new FileReader();
+                const base64 = await new Promise((resolve) => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(compressedBlob);
+                });
 
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+                this.compressedImages.push({
+                    dataUrl: base64,
+                    name: fileData.name,
+                    size: compressedBlob.size
+                });
+            }
 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-
-            const compressedDataUrl = canvas.toDataURL(fileData.type, this.quality);
-
-            this.compressedImages.push({
-                dataUrl: compressedDataUrl,
-                name: fileData.name
-            });
-        });
-
-        Promise.all(promises).then(() => {
             // 更新压缩后的预览网格
             const compressedPreviewGrid = document.getElementById('compressedPreviewGrid');
             compressedPreviewGrid.innerHTML = this.compressedImages.map((img, index) => `
@@ -311,6 +411,10 @@ export class ImageCompressor {
                     <img src="${img.dataUrl}" alt="${img.name}">
                     <div class="preview-item-overlay">
                         <span class="preview-item-name">${img.name}</span>
+                        <div class="preview-item-info">
+                            <span class="preview-item-size">压缩后：${this.formatFileSize(img.size)}</span>
+                            <span class="preview-item-ratio">${Math.round((1 - img.size / this.files[index].size) * 100)}% 减小</span>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -327,8 +431,14 @@ export class ImageCompressor {
                 });
             });
 
+            // 启用下载按钮
             document.querySelector('.download-btn').disabled = false;
-        });
+        } catch (error) {
+            console.error('压缩过程出错:', error);
+            alert('压缩过程中出现错误，请重试');
+        } finally {
+            compressBtn.disabled = false;
+        }
     }
 
     downloadImage() {

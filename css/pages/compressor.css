@@ -214,6 +214,9 @@
     font-size: 0.8rem;
     opacity: 0;
     transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .preview-item:hover .preview-item-overlay {
@@ -297,4 +300,25 @@
 
 .close-modal:hover {
     color: #ddd;
-} 
+}
+
+.preview-item-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.preview-item-resolution {
+    color: #fff;
+}
+
+.preview-item-size {
+    color: #8ff;
+}
+
+.preview-item-ratio {
+    color: #4CAF50;
+    margin-left: 8px;
+}
+ 
