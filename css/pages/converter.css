@@ -1,0 +1,557 @@
+.converter-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--spacing-large);
+}
+
+.converter-title {
+    font-size: 2.4rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-large);
+}
+
+.converter-intro {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-large);
+    margin-bottom: var(--spacing-large);
+}
+
+.converter-icon {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.converter-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+    background: #f8f9fa;
+}
+
+.upload-dropzone {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-medium);
+}
+
+.upload-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.upload-btn:hover {
+    background: var(--secondary-color);
+}
+
+.preview-area {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+    margin-top: var(--spacing-large);
+    box-shadow: var(--card-shadow);
+}
+
+.preview-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-large);
+    margin-bottom: var(--spacing-large);
+}
+
+.preview-box {
+    background: white;
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.preview-box h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-medium);
+}
+
+.preview-image {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-image img {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.convert-options {
+    text-align: center;
+}
+
+.convert-options h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-medium);
+}
+
+.format-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-medium);
+    margin-bottom: var(--spacing-large);
+}
+
+.format-btn {
+    padding: 10px 30px;
+    border: none;
+    border-radius: var(--border-radius);
+    background: white;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.format-btn:hover,
+.format-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.convert-actions {
+    display: flex;
+    gap: var(--spacing-medium);
+    justify-content: center;
+    margin-top: var(--spacing-large);
+}
+
+.convert-btn,
+.download-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.convert-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.download-btn {
+    background: #28a745;
+    color: white;
+}
+
+.convert-btn:hover {
+    background: var(--secondary-color);
+}
+
+.download-btn:hover {
+    background: #218838;
+}
+
+.convert-btn:disabled,
+.download-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 1200px) {
+    .convert-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .converter-container {
+        padding: var(--spacing-medium);
+    }
+
+    .converter-intro {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .preview-container {
+        grid-template-columns: 1fr;
+    }
+
+    .format-buttons {
+        flex-wrap: wrap;
+    }
+
+    .convert-actions {
+        flex-direction: column;
+        gap: var(--spacing-medium);
+    }
+} 
+
+.upload-area.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(78, 84, 200, 0.1);
+}
+
+.format-btn:disabled,
+.batch-convert-btn:disabled,
+.download-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.preview-image {
+    position: relative;
+}
+
+.preview-image::before {
+    content: "加载中...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    display: none;
+}
+
+.preview-image.loading::before {
+    display: block;
+}
+
+.file-list {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-medium);
+    margin-bottom: var(--spacing-large);
+}
+
+.file-list h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-medium);
+}
+
+.file-list-content {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-medium);
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.3s;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item.active {
+    background-color: rgba(78, 84, 200, 0.1);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+}
+
+.file-name {
+    color: var(--text-color);
+}
+
+.file-size {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.file-actions {
+    display: flex;
+    gap: var(--spacing-small);
+}
+
+.preview-btn,
+.remove-btn {
+    padding: 4px 8px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.preview-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.preview-btn:hover {
+    background: var(--secondary-color);
+}
+
+.remove-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.remove-btn:hover {
+    background: #c82333;
+}
+
+.upload-limit {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: var(--spacing-small);
+}
+
+/* 预览网格样式 */
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-medium);
+    padding: var(--spacing-medium);
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    min-height: 200px;
+}
+
+.preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.preview-item:hover {
+    transform: scale(1.05);
+}
+
+.preview-item.active {
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-item-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: var(--spacing-small);
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.preview-item:hover .preview-item-overlay {
+    opacity: 1;
+}
+
+.preview-item-name {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preview-item-size {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+    background: #dc3545;
+}
+
+/* 模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    margin: 2% auto;
+}
+
+.modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.preview-section {
+    width: 100%;
+    background: white;
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+}
+
+.preview-section h3 {
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-medium);
+    text-align: left;
+}
+
+/* 预览模态框样式 */
+.preview-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    margin: auto;
+}
+
+.preview-modal-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.close-modal:hover {
+    color: #ddd;
+}
+
+/* 转换后预览区域样式 */
+.converted-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-medium);
+    padding: var(--spacing-medium);
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.converted-preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.converted-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.converted-preview-item:hover img {
+    transform: scale(1.05);
+}
+
+.preview-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-small);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.converted-preview-item:hover .preview-info {
+    opacity: 1;
+}
+
+.preview-info span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+ 

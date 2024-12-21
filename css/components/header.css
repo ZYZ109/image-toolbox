@@ -1,0 +1,70 @@
+.header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-medium);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.header__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+}
+
+.header__logo h1 {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0;
+}
+
+.header__nav ul {
+    display: flex;
+    list-style: none;
+    margin-top: var(--spacing-small);
+}
+
+.header__nav a {
+    color: white;
+    text-decoration: none;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius);
+    transition: background-color 0.3s;
+    font-weight: 500;
+}
+
+.header__nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .header__nav ul {
+        margin-top: 0;
+    }
+} 
+
+.header__icon {
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    animation: spin 3s infinite linear;
+}
+
+/* 添加旋转动画 */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+} 

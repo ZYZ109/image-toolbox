@@ -1,0 +1,22 @@
+.footer {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: center;
+    padding: var(--spacing-medium);
+    margin-top: var(--spacing-large);
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--spacing-small);
+    }
+    
+    .footer p {
+        font-size: 0.8rem;
+    }
+} 

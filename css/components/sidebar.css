@@ -1,0 +1,72 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px; /* 头部导航栏的高度 */
+    bottom: 0;
+    width: 200px;
+    background: white;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 900;
+    padding-top: var(--spacing-medium);
+}
+
+.sidebar__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar__nav li {
+    margin: 0;
+    padding: 0;
+    margin-bottom: var(--spacing-small);
+}
+
+.sidebar__nav a {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-medium);
+    color: var(--text-color);
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border-left: 3px solid transparent;
+}
+
+.sidebar__icon {
+    font-size: 1.2rem;
+    margin-right: var(--spacing-small);
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar__text {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.sidebar__nav a:hover,
+.sidebar__nav a.active {
+    background-color: rgba(78, 84, 200, 0.1);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    
+    .sidebar__text {
+        display: none;
+    }
+    
+    .sidebar__icon {
+        margin: 0;
+    }
+
+    .sidebar__nav a {
+        padding: var(--spacing-medium);
+        justify-content: center;
+    }
+} 

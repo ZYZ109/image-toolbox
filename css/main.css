@@ -1,0 +1,112 @@
+/* 全局变量定义 */
+:root {
+    /* 主题颜色 */
+    --primary-color: #4e54c8;
+    --secondary-color: #1e2a78;
+    --background-color: #f0f2f5;
+    --text-color: #2c3e50;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    
+    /* 间距 */
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 2rem;
+    
+    /* 圆角 */
+    --border-radius: 12px;
+}
+
+/* 重置样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+/* 主布局容器 */
+.main {
+    max-width: 100%;
+    min-height: calc(100vh - 60px); /* 减去顶栏高度 */
+    margin-top: 60px;
+    margin-left: 200px;
+    padding: var(--spacing-medium);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 首页标题 */
+.page-title {
+    width: 100%;
+    max-width: 1200px;
+    margin: var(--spacing-large) auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-title h1 {
+    font-size: 2.8rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-medium);
+    font-weight: bold;
+    letter-spacing: -0.5px;
+    text-align: center;
+}
+
+.page-title p {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+    text-align: center;
+}
+
+/* 工具网格 */
+.tools-grid {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-large);
+    padding: var(--spacing-medium);
+}
+
+/* 工具内容区域 */
+.tool-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex: 1;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .main {
+        margin-left: 60px;
+        margin-top: 60px;
+    }
+
+    .tools-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-small);
+    }
+
+    .page-title {
+        padding: 0 var(--spacing-medium);
+    }
+
+    .page-title p {
+        max-width: 100%;
+    }
+} 
